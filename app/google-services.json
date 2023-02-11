@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "247133120455",
+    "project_id": "keiziban-3cb5e",
+    "storage_bucket": "keiziban-3cb5e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:247133120455:android:56bc4d409dc3e489b65be2",
+        "android_client_info": {
+          "package_name": "app.okuyama.yuu.test_keiziban"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "247133120455-ai8vop5irosg4dtku1sa4h0akib5ta37.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9_UI5v8JUd_qoOxOWnkTMuGqnm1h8OXU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "247133120455-ai8vop5irosg4dtku1sa4h0akib5ta37.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
