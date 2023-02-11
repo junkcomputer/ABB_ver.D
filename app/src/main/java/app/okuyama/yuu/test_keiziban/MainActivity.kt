@@ -1,24 +1,15 @@
 package app.okuyama.yuu.test_keiziban
 
-import android.content.ContentValues.TAG
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.UserDictionary.Words
 import android.util.Log
-import android.view.Gravity
-import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.core.view.isVisible
-import app.okuyama.yuu.test_keiziban.databinding.ActivityAddBinding
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import app.okuyama.yuu.test_keiziban.databinding.ActivityMainBinding
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import org.checkerframework.checker.units.qual.A
-import kotlin.concurrent.thread
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -28,6 +19,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater).apply { setContentView(this.root) }
 
         val db = Firebase.firestore
+        val manager = LinearLayoutManager(this)
+        binding.recyclerView2.layoutManager = manager
         val taro = MainAdapter()
 
         binding.recyclerView2.adapter = taro
@@ -45,19 +38,10 @@ class MainActivity : AppCompatActivity() {
                             main.add(Datas(document.data.get("name").toString(),document.data.get("text").toString()))
                     }
                 }
-                Log.d("neko", main.toString())
+                //Log.d("neko", main.toString())
                 taro.updateThreads(main)
             }
 
-        binding.kousinkun.setOnClickListener {
-            val MainIntent: Intent = Intent(this,MainActivity::class.java)
-            MainIntent.putExtra("threadName",rThreadName)
-            startActivity(MainIntent)
-        }
-    }
-}
-
-/*
         //送信ボタン
         binding.sousin.setOnClickListener {
 
@@ -68,7 +52,7 @@ class MainActivity : AppCompatActivity() {
 
             //書き込み
 
-            db.collection("Thread").document()
+            db.collection("Thread").document(binding.documenttextview.text.toString())
                 .set(data)
                 .addOnSuccessListener {
                 }
@@ -76,10 +60,17 @@ class MainActivity : AppCompatActivity() {
                 }
 
             val MainIntent: Intent = Intent(this,MainActivity::class.java)
+            MainIntent.putExtra("threadName",rThreadName)
             startActivity(MainIntent)
-        }*/
+        }
 
-
+        binding.kousinkun.setOnClickListener {
+            val MainIntent: Intent = Intent(this,MainActivity::class.java)
+            MainIntent.putExtra("threadName",rThreadName)
+            startActivity(MainIntent)
+        }
+    }
+}
 
 //読み込み
 /*db.collection("Thread").document(rThreadName)
