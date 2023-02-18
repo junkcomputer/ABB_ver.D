@@ -1,6 +1,6 @@
 package app.okuyama.yuu.test_keiziban
 
 data class Datas (
-    val name: String = "",
-    val text: String = ""
+    val name: List<String> = listOf(),
+    val text: List<String> = listOf()
 )

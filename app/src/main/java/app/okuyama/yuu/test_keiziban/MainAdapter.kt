@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import app.okuyama.yuu.test_keiziban.databinding.MainRecyclerBinding
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class MainAdapter : RecyclerView.Adapter<MainViewHolder>(){
     private val MainList: MutableList<Datas> = mutableListOf()
@@ -16,8 +18,8 @@ class MainAdapter : RecyclerView.Adapter<MainViewHolder>(){
     override fun onBindViewHolder(holder: MainViewHolder,position: Int) {
         val Datas = MainList[position]
         //val ThreadNames = ThreadList[position]
-        holder.binding.nametextview.text = Datas.name
-        holder.binding.texttextview.text = Datas.text
+        holder.binding.nametextview.text = Datas.name[]
+        holder.binding.texttextview.text = Datas.text[]
         //holder.binding.nametextView.text = ThreadNames.thread
     }
 

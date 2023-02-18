@@ -35,7 +35,8 @@ class MainActivity : AppCompatActivity() {
                 for (document in result){
                     //Log.d("xxxxxx" ,rThreadName.toString())
                     if (document.id == rThreadName) {
-                            main.add(Datas(document.data.get("name").toString(),document.data.get("text").toString()))
+                        //val length = Datas(document.data.get("name") as List<String>)
+                            main.add(Datas(document.data.get("name")as List<String>,document.data.get("text") as List<String>))
                     }
                 }
                 //Log.d("neko", main.toString())
@@ -45,24 +46,50 @@ class MainActivity : AppCompatActivity() {
         //送信ボタン
         binding.sousin.setOnClickListener {
 
-            val data = Datas(
-                name = binding.onamae.text.toString(),
-                text = binding.kakiko.text.toString()
-            )
 
-            //書き込み
 
-            db.collection("Thread").document(binding.documenttextview.text.toString())
-                .set(data)
-                .addOnSuccessListener {
+
+
+            db.collection("Thread")
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result){
+                        //Log.d("xxxxxx" ,rThreadName.toString())
+                        if (document.id == rThreadName) {
+                            val list: List<String> = document.data.get("name") as List<String>
+                            val size = list.size
+                            //1
+                            val nameList: MutableList<String> = document.data.get("name") as MutableList<String>
+                            nameList.add(size, binding.onamae.text.toString())
+                            val textList: MutableList<String> = document.data.get("text") as MutableList<String>
+                            textList.add(size, binding.kakiko.text.toString())
+
+                            val data = Datas(
+                                name = nameList,
+                                text = textList
+                            )
+
+                            //書き込み
+                            db.collection("Thread").document(binding.documenttextview.text.toString())
+                                .set(data)
+                                .addOnSuccessListener {
+                                }
+                                .addOnFailureListener {
+                                }
+
+                            val MainIntent: Intent = Intent(this,MainActivity::class.java)
+                            MainIntent.putExtra("threadName",rThreadName)
+                            startActivity(MainIntent)
+                        }
+
+
+                        }
+                    }
+                    //Log.d("neko", main.toString())
                 }
-                .addOnFailureListener {
-                }
 
-            val MainIntent: Intent = Intent(this,MainActivity::class.java)
-            MainIntent.putExtra("threadName",rThreadName)
-            startActivity(MainIntent)
-        }
+
+
 
         binding.kousinkun.setOnClickListener {
             val MainIntent: Intent = Intent(this,MainActivity::class.java)

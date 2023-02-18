@@ -19,13 +19,14 @@ class AddActivity : AppCompatActivity() {
 
         var db = Firebase.firestore
 
-
-
         Addbinding.sousinTuikaKun.setOnClickListener {
 
+            val addnameList: List<String> = listOf(Addbinding.onamaeTuikaKun.text.toString())
+            val addtextList: List<String> = listOf(Addbinding.honbunTuikaKun.text.toString())
+
             val data = Datas(
-                name = Addbinding.onamaeTuikaKun.text.toString(),
-                text = Addbinding.honbunTuikaKun.text.toString()
+                name = addnameList,
+                text = addtextList
             )
             val MainIntent: Intent = Intent(this,MainActivity::class.java)
             db.collection("Thread").document(Addbinding.threadTuikaKun.text.toString())
