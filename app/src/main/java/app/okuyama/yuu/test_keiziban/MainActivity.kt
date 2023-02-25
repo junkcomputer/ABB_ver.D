@@ -2,10 +2,10 @@ package app.okuyama.yuu.test_keiziban
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import app.okuyama.yuu.test_keiziban.MyClass.Companion.nameList
+import app.okuyama.yuu.test_keiziban.MyClass.Companion.textList
 import app.okuyama.yuu.test_keiziban.databinding.ActivityMainBinding
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -18,12 +18,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         binding = ActivityMainBinding.inflate(layoutInflater).apply { setContentView(this.root) }
 
+        nameList.clear()
+        textList.clear()
         val db = Firebase.firestore
         val manager = LinearLayoutManager(this)
         binding.recyclerView2.layoutManager = manager
         val taro = MainAdapter()
-
         binding.recyclerView2.adapter = taro
+
         val rThreadName = intent.getStringExtra("threadName").toString()
         binding.documenttextview.text = rThreadName
 
@@ -36,7 +38,7 @@ class MainActivity : AppCompatActivity() {
                     //Log.d("xxxxxx" ,rThreadName.toString())
                     if (document.id == rThreadName) {
                         //val length = Datas(document.data.get("name") as List<String>)
-                            main.add(Datas(document.data.get("name")as List<String>,document.data.get("text") as List<String>))
+                            main.add(Datas(document.data.get("name")as MutableList<String>,document.data.get("text") as MutableList<String>))
                     }
                 }
                 //Log.d("neko", main.toString())
@@ -45,11 +47,6 @@ class MainActivity : AppCompatActivity() {
 
         //送信ボタン
         binding.sousin.setOnClickListener {
-
-
-
-
-
             db.collection("Thread")
                 .get()
                 .addOnSuccessListener { result ->
@@ -59,14 +56,14 @@ class MainActivity : AppCompatActivity() {
                             val list: List<String> = document.data.get("name") as List<String>
                             val size = list.size
                             //1
-                            val nameList: MutableList<String> = document.data.get("name") as MutableList<String>
-                            nameList.add(size, binding.onamae.text.toString())
-                            val textList: MutableList<String> = document.data.get("text") as MutableList<String>
-                            textList.add(size, binding.kakiko.text.toString())
+                            var tNameList: MutableList<String> = document.data.get("name") as MutableList<String>
+                            tNameList.add(size, binding.onamae.text.toString())
+                            var tTextList: MutableList<String> = document.data.get("text") as MutableList<String>
+                            tTextList.add(size, binding.kakiko.text.toString())
 
                             val data = Datas(
-                                name = nameList,
-                                text = textList
+                                name = tNameList,
+                                text = tTextList
                             )
 
                             //書き込み
@@ -76,6 +73,9 @@ class MainActivity : AppCompatActivity() {
                                 }
                                 .addOnFailureListener {
                                 }
+
+                            nameList = tNameList
+                            textList = tTextList
 
                             val MainIntent: Intent = Intent(this,MainActivity::class.java)
                             MainIntent.putExtra("threadName",rThreadName)
