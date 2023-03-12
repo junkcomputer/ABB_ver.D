@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         nameList.clear()
         textList.clear()
         val db = Firebase.firestore
+        val selectIntent:Intent = Intent(this,SelectActivity::class.java)
         val manager = LinearLayoutManager(this)
         //binding.recyclerView2.layoutManager = manager
         val taro = MainAdapter()
@@ -36,6 +37,10 @@ class MainActivity : AppCompatActivity() {
         binding.documenttextview.text = rThreadName.toString()
 
         val main = mutableListOf<Datas>()
+
+        binding.selectmodoru.setOnClickListener {
+            startActivity(selectIntent)
+        }
 
         db.collection("Thread")
             .get()
