@@ -3,8 +3,10 @@ package app.okuyama.yuu.test_keiziban
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -30,14 +32,38 @@ class SelectActivity : AppCompatActivity() {
         db.collection("Thread")
             .get()
             .addOnSuccessListener { result ->
-                val threadNames = mutableListOf<ThreadNames>()
+                for (document in result) {
+                    val idView = Button(this)
+                    val layout = LinearLayout(this)
+                    idView.text = document.id.toString()
+                    idView.textSize = 20.0f
+                    idView.setOnClickListener {
+                        val mainIntent: Intent = Intent(this,MainActivity::class.java)
+                        mainIntent.putExtra("threadName",document.id.toString())
+                        startActivity(mainIntent)
+                    }
+
+                    layout.addView(idView)
+
+                    val lp = LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                    )
+
+                    lp.gravity = Gravity.CENTER_VERTICAL
+                    idView.layoutParams = lp
+
+                    Selectbinding.container.addView(layout)
+                }
+                /*val threadNames = mutableListOf<ThreadNames>()
                 for (document in result) {
                     threadNames.add(ThreadNames(document.id))
                 }
                 adapter.updateThreads(threadNames)
+                 */
             }
 
-        Selectbinding.recyclerView.adapter = adapter
+        //Selectbinding.recyclerView.adapter = adapter
 
 
 

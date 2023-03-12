@@ -21,7 +21,7 @@ class ThreadNameAdapter : RecyclerView.Adapter<ThreadNameViewHolder>(){
         //holder.binding.nametextView.text = Datas.name
         holder.binding.nametextView.text = ThreadNames.thread
     }
-
+//五等分の花嫁
     override fun getItemCount(): Int {
         return ThreadList.size
     }
