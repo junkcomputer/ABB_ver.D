@@ -7,6 +7,7 @@ import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.okuyama.yuu.test_keiziban.MyClass.Companion.nameList
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         textList.clear()
         val db = Firebase.firestore
         val selectIntent:Intent = Intent(this,SelectActivity::class.java)
+        val addIntent:Intent = Intent(this,AddActivity::class.java)
         val manager = LinearLayoutManager(this)
         //binding.recyclerView2.layoutManager = manager
         val taro = MainAdapter()
@@ -37,6 +39,10 @@ class MainActivity : AppCompatActivity() {
         binding.documenttextview.text = rThreadName.toString()
 
         val main = mutableListOf<Datas>()
+
+        binding.addidou.setOnClickListener {
+            startActivity(addIntent)
+        }
 
         binding.selectmodoru.setOnClickListener {
             startActivity(selectIntent)
@@ -101,45 +107,53 @@ class MainActivity : AppCompatActivity() {
 
         //送信ボタン
         binding.sousin.setOnClickListener {
-            db.collection("Thread")
-                .get()
-                .addOnSuccessListener { result ->
-                    for (document in result){
-                        //Log.d("xxxxxx" ,rThreadName.toString())
-                        if (document.id == rThreadName) {
-                            val list: List<String> = document.data.get("name") as List<String>
-                            val size = list.size
-                            var tNameList: MutableList<String> = document.data.get("name") as MutableList<String>
-                            tNameList.add(size, binding.onamae.text.toString())
-                            var tTextList: MutableList<String> = document.data.get("text") as MutableList<String>
-                            tTextList.add(size, binding.kakiko.text.toString())
 
-                            val data = Datas(
-                                name = tNameList,
-                                text = tTextList
-                            )
+            if (binding.onamae.text.length == 0 || binding.kakiko.text.length == 0) {
 
-                            //書き込み
-                            db.collection("Thread").document(binding.documenttextview.text.toString())
-                                .set(data)
-                                .addOnSuccessListener {
-                                }
-                                .addOnFailureListener {
-                                }
+                Toast.makeText(applicationContext,"何か文字を入力してください",Toast.LENGTH_SHORT).show()
 
-                            nameList = tNameList
-                            textList = tTextList
+            } else {
 
-                            val MainIntent: Intent = Intent(this,MainActivity::class.java)
-                            MainIntent.putExtra("threadName",rThreadName)
-                            startActivity(MainIntent)
-                        }
+                db.collection("Thread")
+                    .get()
+                    .addOnSuccessListener { result ->
+                        for (document in result){
+                            //Log.d("xxxxxx" ,rThreadName.toString())
+                            if (document.id == rThreadName) {
+                                val list: List<String> = document.data.get("name") as List<String>
+                                val size = list.size
+                                var tNameList: MutableList<String> = document.data.get("name") as MutableList<String>
+                                tNameList.add(size, binding.onamae.text.toString())
+                                var tTextList: MutableList<String> = document.data.get("text") as MutableList<String>
+                                tTextList.add(size, binding.kakiko.text.toString())
 
+                                val data = Datas(
+                                    name = tNameList,
+                                    text = tTextList
+                                )
 
+                                //書き込み
+                                db.collection("Thread").document(binding.documenttextview.text.toString())
+                                    .set(data)
+                                    .addOnSuccessListener {
+                                    }
+                                    .addOnFailureListener {
+                                    }
+
+                                nameList = tNameList
+                                textList = tTextList
+
+                                val MainIntent: Intent = Intent(this,MainActivity::class.java)
+                                MainIntent.putExtra("threadName",rThreadName)
+                                startActivity(MainIntent)
+                            }
                         }
                     }
+
+            }
+
                     //Log.d("neko", main.toString())
-                }
+        }
 
         binding.kousinkun.setOnClickListener {
             val MainIntent: Intent = Intent(this,MainActivity::class.java)

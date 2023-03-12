@@ -18,12 +18,13 @@ class AddActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add)
         Addbinding = ActivityAddBinding.inflate(layoutInflater).apply { setContentView(this.root) }
 
-        var db = Firebase.firestore
+        val selectIntent:Intent = Intent(this,SelectActivity::class.java)
+        val db = Firebase.firestore
 
         Addbinding.sousinTuikaKun.setOnClickListener {
 
             if (Addbinding.threadTuikaKun.length() == 0 || Addbinding.onamaeTuikaKun.length() == 0 || Addbinding.honbunTuikaKun.length() == 0) {
-                Toast.makeText(applicationContext, "何か文字を入力してください", Toast.LENGTH_LONG).show()
+                Toast.makeText(applicationContext, "何か文字を入力してください", Toast.LENGTH_SHORT).show()
             } else {
 
                 val addnameList: List<String> = listOf(Addbinding.onamaeTuikaKun.text.toString())
@@ -48,6 +49,8 @@ class AddActivity : AppCompatActivity() {
             }
         }
 
-
+        Addbinding.selectidou.setOnClickListener {
+            startActivity(selectIntent)
+        }
     }
 }
